@@ -342,6 +342,9 @@ html, body {
      and the head should still overlap the bottom of the big title like
      it does on desktop. These two numbers are the knobs to nudge. */
   .character{ width:min(86vw, 420px); top:17%; }
+  /* The character is wide enough on phones to overlap the small floating
+     clouds, so tuck them behind it (character is z-index 3). */
+  .cloud-mini{ z-index:2; }
   .cluster-left{ width:22vw; top:44%; }
   .cluster-right{ width:26vw; top:20%; }
   .bg-title-inner{ font-size:clamp(1.6rem, 8.5vw, 3rem); }
