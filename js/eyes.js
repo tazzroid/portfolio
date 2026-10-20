@@ -27,16 +27,34 @@
   const MAX_Y = 10; // px of iris travel at full asset scale (up/down)
   const EASE = 0.15;
 
-  const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (!hasFinePointer) return; // leave eyes at rest on touch devices
-
   const state = EYES.map(() => ({ x: 0, y: 0 }));
   let mouseX = window.innerWidth / 2;
   let mouseY = window.innerHeight / 2;
 
-  window.addEventListener('mousemove', (e) => {
+  // Mouse: eyes always follow the cursor.
+  // Touch: there is no cursor, so the eyes only look at the finger while
+  // it is pressed on the screen, then settle back to looking straight ahead.
+  let active = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  function track(e) {
     mouseX = e.clientX;
     mouseY = e.clientY;
+  }
+
+  // pointer events cover mouse, finger and pen with one set of listeners
+  window.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'mouse') active = true;
+    track(e);
+  });
+  window.addEventListener('pointerdown', (e) => {
+    active = true;
+    track(e);
+  });
+  window.addEventListener('pointerup', (e) => {
+    if (e.pointerType !== 'mouse') active = false;
+  });
+  window.addEventListener('pointercancel', () => {
+    active = false; // e.g. the finger turned into a page scroll
   });
 
   function tick() {
@@ -51,8 +69,9 @@
       const socketX = rect.left + (eye.cx / ASSET_W) * rect.width;
       const socketY = rect.top + (eye.cy / ASSET_H) * rect.height;
 
-      let dx = mouseX - socketX;
-      let dy = mouseY - socketY;
+      // when not active, aim at the socket itself = eyes at rest
+      let dx = active ? mouseX - socketX : 0;
+      let dy = active ? mouseY - socketY : 0;
 
       const maxX = MAX_X * scale;
       const maxY = MAX_Y * scale;

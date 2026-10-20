@@ -16,26 +16,32 @@ if (burger && links) {
   });
 }
 const customCursor = document.getElementById('customCursor');
+const hasMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-let mouseX = 0;
-let mouseY = 0;
+// Only run the cursor-ring animation when there's actually a mouse.
+// On phones the ring is hidden in CSS, so there's no point running
+// a 60fps loop for it (saves battery too).
+if (customCursor && hasMouse) {
+  let mouseX = 0;
+  let mouseY = 0;
 
-let cursorX = 0;
-let cursorY = 0;
+  let cursorX = 0;
+  let cursorY = 0;
 
-document.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-});
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
 
-function animateCursor() {
-  cursorX += (mouseX - cursorX) * 0.15;
-  cursorY += (mouseY - cursorY) * 0.15;
+  function animateCursor() {
+    cursorX += (mouseX - cursorX) * 0.15;
+    cursorY += (mouseY - cursorY) * 0.15;
 
-  customCursor.style.left = `${cursorX}px`;
-  customCursor.style.top = `${cursorY}px`;
+    customCursor.style.left = `${cursorX}px`;
+    customCursor.style.top = `${cursorY}px`;
 
-  requestAnimationFrame(animateCursor);
+    requestAnimationFrame(animateCursor);
+  }
+
+  animateCursor();
 }
-
-animateCursor();

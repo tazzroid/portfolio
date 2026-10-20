@@ -21,8 +21,15 @@
   let smoothX = -9999, smoothY = -9999; // eased position the bump actually uses
 
   function resize() {
-    w = window.innerWidth;
-    h = window.innerHeight;
+    const nw = window.innerWidth;
+    const nh = window.innerHeight;
+    // Phones fire "resize" constantly while scrolling (the address bar
+    // slides in and out, changing only the height). Rebuilding the canvas
+    // each time causes stutter, so ignore height-only shrinking. The
+    // canvas just stays as tall as the tallest viewport it has seen.
+    if (nw === w && nh <= h) return;
+    w = nw;
+    h = nh;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = w + 'px';
@@ -32,14 +39,20 @@
   window.addEventListener('resize', resize);
   resize();
 
-  window.addEventListener('mousemove', (e) => {
+  // pointer events: mouse hover on desktop, finger press-and-drag on phones
+  function follow(e) {
     targetX = e.clientX;
     targetY = e.clientY;
-  });
-  document.addEventListener('mouseleave', () => {
+  }
+  function release() {
     targetX = -9999;
     targetY = -9999;
-  });
+  }
+  window.addEventListener('pointermove', follow);
+  window.addEventListener('pointerdown', follow);
+  window.addEventListener('pointerup', (e) => { if (e.pointerType !== 'mouse') release(); });
+  window.addEventListener('pointercancel', release);
+  document.addEventListener('mouseleave', release);
 
   function draw() {
     smoothX += (targetX - smoothX) * FOLLOW_EASE;

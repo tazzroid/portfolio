@@ -35,8 +35,22 @@
     mouthSmile.style.opacity = onFace ? '0' : '1';
   }
 
-  window.addEventListener('mousemove', (e) => {
-    setExpression(isInZone(e.clientX, e.clientY));
+  // Pointer events = mouse hover on desktop, finger press on phones.
+  // (Not mousemove: phones fire fake mouse events after every tap, which
+  // would leave the "oops" mouth stuck on.)
+  const update = (e) => setExpression(isInZone(e.clientX, e.clientY));
+  let releaseTimer;
+
+  window.addEventListener('pointermove', update);
+  window.addEventListener('pointerdown', (e) => {
+    clearTimeout(releaseTimer);
+    update(e);
   });
+  window.addEventListener('pointerup', (e) => {
+    if (e.pointerType === 'mouse') return; // desktop keeps following hover
+    // a quick tap is over in ~100ms — hold the "oops" a moment so it's actually seen
+    releaseTimer = setTimeout(() => setExpression(false), 450);
+  });
+  window.addEventListener('pointercancel', () => setExpression(false));
   document.addEventListener('mouseleave', () => setExpression(false));
 })();
