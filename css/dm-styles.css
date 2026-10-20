@@ -71,10 +71,11 @@ html, body {
   transform: translate(-50%, -50%);
 }
 
-/* =========================
-   CUSTOM CURSOR
-   ========================= */
-   
+/* Touch screens have no cursor — without this the ring sits stuck in the
+   top-left corner of the page. */
+@media (hover: none), (pointer: coarse){
+  .custom-cursor{ display:none; }
+}
 
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto; }
@@ -213,6 +214,7 @@ html, body {
   z-index:1;
   width:100%;
   min-height:100vh;
+  min-height:100svh; /* phones: ignores the collapsing address bar, so the hero doesn't jump while scrolling */
   padding-top:5.5rem; /* clears the fixed nav */
   overflow:hidden;
 }
@@ -331,8 +333,15 @@ html, body {
    RESPONSIVE — hide/shrink the smallest clouds on narrow screens
    so the composition doesn't feel cluttered
 ===================================================================== */
+@media (max-width: 1024px){
+  .character{ width:min(44vw, 440px); top:17%; }
+}
+
 @media (max-width: 700px){
-  .character{ width:min(55vw, 320px); top:20%; }
+  /* Bigger on phones: a tall, narrow screen has lots of vertical room,
+     and the head should still overlap the bottom of the big title like
+     it does on desktop. These two numbers are the knobs to nudge. */
+  .character{ width:min(86vw, 420px); top:17%; }
   .cluster-left{ width:22vw; top:44%; }
   .cluster-right{ width:26vw; top:20%; }
   .bg-title-inner{ font-size:clamp(1.6rem, 8.5vw, 3rem); }
@@ -343,18 +352,18 @@ html, body {
 ===================================================================== */
 @media (max-width: 760px){
   .dm-links{
-    position:fixed;
-    top:64px; left:0; right:0;
+    position:absolute;      /* the nav is fixed, so this hangs off the nav itself */
+    top:100%; left:0; right:0; /* always flush with the nav's bottom edge, whatever its height */
     flex-direction:column;
     align-items:flex-start;
     gap:0;
     background:var(--surface);
-    border-bottom:1px solid var(--border);
+    border-bottom:0 solid var(--border); /* no stray 1px line while the menu is closed */
     max-height:0;
     overflow:hidden;
     transition:max-height 0.25s ease;
   }
-  .dm-links.open{ max-height:280px; }
+  .dm-links.open{ max-height:280px; border-bottom-width:1px; }
   .dm-links a{
     width:100%;
     padding:1rem clamp(1.5rem, 5vw, 3rem);
@@ -363,6 +372,6 @@ html, body {
   }
   .dm-links a .dot{ display:none; }
   .dm-cta{ display:none; }
-  .dm-burger{ display:block; }
+  .dm-burger{ display:block; width:2.75rem; height:2.75rem; } /* 44px: comfortable thumb target */
 }
 
