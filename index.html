@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gurtej — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/dm-styles.css">
+<link rel="stylesheet" href="css/work.css">
+</head>
+<body>
+
+    <div class="custom-cursor" id="customCursor">
+        <div class="cursor-dot"></div>
+    </div>
+
+  <!-- ============================================================
+       GLOBAL BACKGROUND LAYER
+       Fixed to the viewport, sits behind everything, stays continuous
+       as more sections get added below. Flat dark surface + a very
+       subtle glow gradient — no grunge texture in this build.
+  ============================================================ -->
+  <div class="dm-bg" aria-hidden="true"></div>
+  <canvas id="dotField" class="dot-field" aria-hidden="true"></canvas>
+
+  <!-- ============================================================
+       TOP NAV — fixed, sits above the background layer
+  ============================================================ -->
+  <header class="dm-nav" id="dmNav">
+    <a href="#" class="dm-logo">GURTEJ</a>
+
+    <nav class="dm-links" id="dmLinks">
+      <a href="#home" class="active">Home<span class="dot"></span></a>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <a href="#contact" class="dm-cta">Let's talk</a>
+
+    <button class="dm-burger" id="dmBurger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+    </button>
+  </header>
+
+  <!-- ============================================================
+       CHARACTER STAGE
+       Intentionally empty for now — this is where your Illustrator
+       layers (background shape, character, dots) will get wired in
+       with the same data-depth parallax system from before.
+  ============================================================ -->
+  <section class="parallax-stage" id="stage">
+
+    <div class="p-layer bg-glow" data-depth="0.015" aria-hidden="true">
+      <img src="bg/bg-glow.svg" alt="">
+    </div>
+
+    <div class="p-layer bg-title" data-depth="0.04">
+      <span class="bg-title-inner">Creative Designer</span>
+    </div>
+
+    <div class="p-layer cloud-back" data-depth="0.03" aria-hidden="true">
+      <img src="bg/cloud-back.svg" alt="">
+    </div>
+
+    <div class="p-layer cloud-front" data-depth="0.05" aria-hidden="true">
+      <img src="bg/cloud-front.svg" alt="">
+    </div>
+
+    <div class="p-layer character" data-depth="0.09">
+      <div class="character-rig">
+        <img class="rig-layer" src="toon/torso.png" alt="">
+        <img class="rig-layer" src="toon/shadow.png" alt="">
+        <img class="rig-layer" src="toon/face.png" alt="Illustrated portrait of Gurtej">
+        <img class="rig-layer mouth-smile" id="mouthSmile" src="toon/mouth-smile.png" alt="">
+        <img class="rig-layer mouth-oops" id="mouthOops" src="toon/mouth-oops.png" alt="">
+        <img class="rig-layer eye" id="eyeLeft" src="toon/eye-left.png" alt="">
+        <img class="rig-layer eye" id="eyeRight" src="toon/eye-right.png" alt="">
+      </div>
+    </div>
+
+    <!-- floating clouds — each file is already a composed group of
+         3 clouds, placed once, not duplicated. -->
+    <div class="p-layer cloud-mini cluster-left" data-depth="0.14" aria-hidden="true">
+      <img src="bg/cloud-a.svg" alt="">
+    </div>
+    <div class="p-layer cloud-mini cluster-right" data-depth="0.16" aria-hidden="true">
+      <img src="bg/cloud-b.svg" alt="">
+    </div>
+
+  </section>
+
+  <div id="work-section-mount"></div>
+
+  <script src="js/ripple-dots.js"></script>
+  <script src="js/bg-title-fit.js"></script>
+  <script src="js/parallax.js"></script>
+  <script src="js/eyes.js"></script>
+  <script src="js/mouth.js"></script>
+
+  <script src="js/section-work.js"></script>
+  <script src="js/dm-script.js"></script>
+
+  
+</body>
+</html>
